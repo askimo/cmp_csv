@@ -45,6 +45,7 @@ for i in range(row_n):
     if len(search) == 1 : #找到1个
         new.iloc[i,0]="match"
         old_id=old[old["工号"]==GH].index[0]
+        old.iloc[old_id, 0] = "match"
         dif_flag=False
         for j in range(1,23):
             if j==21 or j==15:
@@ -60,20 +61,29 @@ for i in range(row_n):
         if dif_flag:
             DIF.append(new.iloc[i,])
             #print("**** FIND   DIFERENCE ****")
-        old.iloc[old_id,0]="match"
+
 
         pass
     elif len(search)== 0 :#没找到，说明这个GH是新增的
-        
+        new.iloc[i,0]='新增人员'
+        ADD.append(new.iloc[i,])
         pass
-    else:#旧的有，新的没有，说明是删除了人员
-        pass
+
+search=old[old[item[0]]!='match']
 
 
+print(len(DIF))
+print(len(ADD))
+print(len(search))
+
+for i in range(len(search)):
+    search.iloc[i,0]='删除人员'
+    DEL.append(search.iloc[i,])
 
 
+RES=ADD+DEL+DIF
 
-res=pd.DataFrame(DIF)
+res=pd.DataFrame(RES)
 res.to_csv(res_file_path)
 
         
